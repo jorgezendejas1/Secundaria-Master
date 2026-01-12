@@ -7,7 +7,7 @@ import { PERSONAS } from '../constants';
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 // Models
-const CHAT_MODEL = 'gemini-2.5-flash-lite';
+const CHAT_MODEL = 'gemini-flash-lite-latest';
 const TTS_MODEL = 'gemini-2.5-flash-preview-tts';
 
 // Manage separate chat sessions for each subject
