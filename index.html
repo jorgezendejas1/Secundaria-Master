@@ -5,22 +5,67 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Leo - Secu Master</title>
+    <title>Secundaria Master - Premium Tutor</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
       :root {
         --apple-bg: #f5f5f7;
+        --apple-gray: #86868b;
+        --apple-black: #1d1d1f;
       }
+      
       body {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         background-color: var(--apple-bg);
+        color: var(--apple-black);
+        -webkit-font-smoothing: antialiased;
       }
+
       .font-display {
         font-family: 'Fredoka', sans-serif;
       }
-      /* Custom scrollbar - minimal apple style */
+      
+      /* Ultra Premium Glassmorphism */
+      .glass {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(40px) saturate(200%);
+        -webkit-backdrop-filter: blur(40px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+
+      .glass-dark {
+        background: rgba(29, 29, 31, 0.8);
+        backdrop-filter: blur(30px) saturate(180%);
+        -webkit-backdrop-filter: blur(30px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* Transitions */
+      .smooth-transition {
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.98); }
+        to { opacity: 1; transform: scale(1); }
+      }
+
+      @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .animate-slide-up {
+        animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      /* Custom Scrollbar */
       ::-webkit-scrollbar {
         width: 5px;
       }
@@ -34,34 +79,32 @@
       ::-webkit-scrollbar-thumb:hover {
         background: rgba(0,0,0,0.2); 
       }
-      
-      .glass {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-      }
 
-      @keyframes slideUp {
-        from { transform: translateY(20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+      .apple-button {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
       }
-      .animate-slide-up {
-        animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      .apple-button:active {
+        transform: scale(0.94);
+      }
+      
+      .chat-bubble-user {
+        background: linear-gradient(135deg, #007AFF 0%, #0056D2 100%);
+        box-shadow: 0 10px 30px rgba(0, 122, 255, 0.2);
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
-  }
-}
-</script>
-</head>
+    <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "react": "https://aistudiocdn.com/react@^19.2.0",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+        "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
+      }
+    }
+    </script>
+  </head>
   <body class="antialiased overflow-hidden">
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>

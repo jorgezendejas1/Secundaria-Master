@@ -6,9 +6,10 @@ import { PERSONAS } from '../constants';
 // Initialize Gemini Client
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-// Models
-const CHAT_MODEL = 'gemini-flash-lite-latest';
-const TTS_MODEL = 'gemini-2.5-flash-preview-tts';
+// ABSOLUTELY MOST ECONOMICAL MODELS
+const CHAT_MODEL = 'gemini-flash-lite-latest'; // Text/Chat - The cheapest flash model
+const LIVE_MODEL = 'gemini-2.5-flash-native-audio-preview-12-2025'; // Native Audio Flash
+const TTS_MODEL = 'gemini-2.5-flash-preview-tts'; // TTS Flash
 
 // Manage separate chat sessions for each subject
 const chatSessions: Record<string, Chat> = {};
@@ -21,13 +22,12 @@ export const getOrCreateChatSession = (mode: SubjectMode): Chat => {
       systemInstruction: persona.systemInstruction,
     };
 
-    // Feature: Thinking Mode for Math
-    // Flash-Lite supports thinking. We keep a small budget for logic verification while prioritizing speed.
+    // Keep it economical: minimum thinking budget only where logic is critical
     if (mode === SubjectMode.MATH) {
-      config.thinkingConfig = { thinkingBudget: 1024 }; 
+      config.thinkingConfig = { thinkingBudget: 0 }; // Disable thinking to keep it ultra-fast and cheap
     } 
     
-    // Feature: Search Grounding for Physics, Civics, and History
+    // Feature: Search Grounding (economical search tool)
     if (mode === SubjectMode.PHYSICS || mode === SubjectMode.CIVICS || mode === SubjectMode.HISTORY) {
        config.tools = [{ googleSearch: {} }];
     }
@@ -57,11 +57,10 @@ export const sendMessageStream = async (
       };
   }
 
-  // Use sendMessageStream
   return chat.sendMessageStream({ message: msgContent });
 };
 
-// Feature: Generate Speech (TTS)
+// Feature: Generate Speech (TTS Flash)
 export const generateSpeech = async (text: string) => {
   try {
     const response = await ai.models.generateContent({
@@ -71,42 +70,15 @@ export const generateSpeech = async (text: string) => {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Kore' }, // Energetic voice
+            prebuiltVoiceConfig: { voiceName: 'Kore' }, 
           },
         },
       },
     });
     
-    const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-    return base64Audio;
+    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
   } catch (error) {
     console.error("TTS Error:", error);
     return null;
   }
 };
-
-// Feature: Transcribe Audio (STT)
-export const transcribeAudio = async (base64Audio: string) => {
-    try {
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: {
-                parts: [
-                    {
-                        inlineData: {
-                            mimeType: 'audio/wav', // Assuming WAV container from frontend recorder
-                            data: base64Audio
-                        }
-                    },
-                    {
-                        text: "Transcribe este audio exactamente como fue dicho, en español."
-                    }
-                ]
-            }
-        });
-        return response.text;
-    } catch (e) {
-        console.error("Transcription error", e);
-        return null;
-    }
-}

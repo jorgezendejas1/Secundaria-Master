@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { DailyChallenge, SubjectMode } from '../types';
-import { CheckCircle, XCircle, BrainCircuit } from 'lucide-react';
+import { CheckCircle, XCircle, BrainCircuit, X } from 'lucide-react';
 
 interface DailyChallengeModalProps {
   challenge: DailyChallenge | null;
@@ -33,74 +33,60 @@ const DailyChallengeModal: React.FC<DailyChallengeModalProps> = ({
     const isCorrect = selectedOption === challenge.correctAnswer;
     setTimeout(() => {
         onComplete(isCorrect);
-    }, 2000); // Wait 2s to show result then close
+    }, 2500); 
   };
 
   const getOptionStyle = (index: number) => {
     if (!isSubmitted) {
       return selectedOption === index 
-        ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200' 
-        : 'border-gray-200 hover:bg-gray-50';
+        ? 'border-black bg-black text-white shadow-xl scale-[1.02]' 
+        : 'border-gray-100 bg-white/50 hover:bg-white hover:border-gray-200';
     }
     
-    // Result state
     if (index === challenge.correctAnswer) {
-      return 'border-green-500 bg-green-50 ring-2 ring-green-200';
+      return 'border-green-500 bg-green-50 ring-2 ring-green-100 scale-[1.02]';
     }
     if (index === selectedOption && index !== challenge.correctAnswer) {
-      return 'border-red-500 bg-red-50';
+      return 'border-red-400 bg-red-50 opacity-60';
     }
-    return 'border-gray-100 opacity-50';
-  };
-
-  const getSubjectName = (mode: SubjectMode) => {
-      switch(mode) {
-          case SubjectMode.MATH: return 'Matemáticas';
-          case SubjectMode.PHYSICS: return 'Física';
-          case SubjectMode.CIVICS: return 'Cívica';
-          case SubjectMode.HISTORY: return 'Historia';
-          case SubjectMode.CHEMISTRY: return 'Química';
-          default: return 'Reto General';
-      }
+    return 'border-gray-50 opacity-30 grayscale';
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60] p-4 backdrop-blur-sm">
-      <div className="w-full max-w-lg bg-white rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-300 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-300 rounded-full blur-3xl opacity-20 -ml-10 -mb-10"></div>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[300] p-4 backdrop-blur-xl animate-fade-in">
+      <div className="w-full max-w-xl glass rounded-[3.5rem] p-10 md:p-14 shadow-[0_50px_100px_rgba(0,0,0,0.2)] relative overflow-hidden">
+        {/* Abstract shapes */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-200/20 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-200/20 rounded-full blur-[80px] -ml-32 -mb-32"></div>
 
         <div className="relative z-10">
-          <button onClick={onClose} className="absolute top-0 right-0 text-gray-400 hover:text-gray-600">✕</button>
+          <button onClick={onClose} className="apple-button absolute -top-4 -right-4 w-12 h-12 flex items-center justify-center glass rounded-full shadow-sm hover:scale-110">
+            <X className="w-6 h-6 text-gray-400" />
+          </button>
           
-          <div className="flex items-center gap-3 mb-4">
-             <div className="p-3 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl shadow-lg text-white">
-                <BrainCircuit className="w-8 h-8" />
+          <div className="flex flex-col items-center text-center mb-10">
+             <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-[2rem] shadow-2xl flex items-center justify-center text-white mb-6 rotate-3">
+                <BrainCircuit className="w-10 h-10" />
              </div>
-             <div>
-                <h2 className="text-2xl font-bold text-gray-800">Reto Diario</h2>
-                <div className="text-sm font-semibold text-purple-600 uppercase tracking-wide">
-                  {getSubjectName(challenge.subject)}
-                </div>
-             </div>
+             <h2 className="text-4xl font-bold text-gray-900 font-display tracking-tight mb-2">Reto Diario</h2>
+             <p className="text-[10px] font-black text-purple-600 uppercase tracking-[0.4em]">Misión de Inteligencia</p>
           </div>
 
-          <p className="text-lg text-gray-700 font-medium mb-6">
+          <p className="text-xl text-gray-800 font-medium mb-10 text-center leading-relaxed">
             {challenge.question}
           </p>
 
-          <div className="space-y-3 mb-6">
+          <div className="space-y-4 mb-10">
             {challenge.options.map((opt, idx) => (
               <button
                 key={idx}
                 onClick={() => handleOptionClick(idx)}
                 disabled={isSubmitted}
-                className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 font-medium flex justify-between items-center ${getOptionStyle(idx)}`}
+                className={`w-full text-center p-6 rounded-[2rem] border-2 smooth-transition font-bold text-lg flex justify-center items-center gap-3 ${getOptionStyle(idx)}`}
               >
                 <span>{opt}</span>
-                {isSubmitted && idx === challenge.correctAnswer && <CheckCircle className="w-5 h-5 text-green-500" />}
-                {isSubmitted && idx === selectedOption && idx !== challenge.correctAnswer && <XCircle className="w-5 h-5 text-red-500" />}
+                {isSubmitted && idx === challenge.correctAnswer && <CheckCircle className="w-6 h-6 text-green-500" />}
+                {isSubmitted && idx === selectedOption && idx !== challenge.correctAnswer && <XCircle className="w-6 h-6 text-red-500" />}
               </button>
             ))}
           </div>
@@ -109,13 +95,13 @@ const DailyChallengeModal: React.FC<DailyChallengeModalProps> = ({
             <button
               onClick={handleSubmit}
               disabled={selectedOption === null}
-              className="w-full py-3 rounded-xl bg-gray-900 text-white font-bold hover:bg-black transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              className="apple-button w-full py-6 rounded-[2.2rem] bg-black text-white font-bold text-xl shadow-2xl disabled:opacity-30 disabled:cursor-not-allowed hover:opacity-90 active:scale-95"
             >
-              Comprobar Respuesta
+              Verificar ADN Cognitivo
             </button>
           ) : (
-             <div className={`text-center font-bold text-lg animate-bounce ${selectedOption === challenge.correctAnswer ? 'text-green-600' : 'text-red-500'}`}>
-                {selectedOption === challenge.correctAnswer ? challenge.rewardText : "¡Casi! Inténtalo mañana."}
+             <div className={`text-center font-bold text-xl animate-bounce pt-2 font-display ${selectedOption === challenge.correctAnswer ? 'text-green-600' : 'text-red-500'}`}>
+                {selectedOption === challenge.correctAnswer ? "✨ ¡Magnífico! +10 Puntos de IQ" : "⚠️ Recalibrando neuronas..."}
              </div>
           )}
         </div>
